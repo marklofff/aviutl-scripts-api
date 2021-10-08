@@ -85,5 +85,14 @@ defmodule AviutlScriptsWeb.Schema.ScriptType do
       resolve &Resolvers.ScriptResolver.create/3
       middleware &build_payload/2
     end
+
+    @desc "Delete a script"
+    field :delete_script, type: :script_payload do
+      arg :id, :id
+
+      # TODO middleware Authentication
+      resolve &Resolvers.ScriptResolver.delete/3
+      middleware &build_payload/2
+    end
   end
 end

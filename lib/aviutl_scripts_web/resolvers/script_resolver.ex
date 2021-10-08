@@ -45,4 +45,13 @@ defmodule AviutlScriptsWeb.Resolvers.ScriptResolver do
     |> ScriptManager.update_script(params)
     |> generate_payload()
   end
+
+  def delete(_, %{id: id}, %{context: _context}) do
+    # TODO
+    script = ScriptManager.get_script!(id)
+
+    script
+    |> ScriptManager.delete_script()
+    |> generate_payload()
+  end
 end

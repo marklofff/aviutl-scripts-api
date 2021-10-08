@@ -4,6 +4,7 @@ defmodule AviutlScripts.ScriptManager do
   """
 
   import Ecto.Query, warn: false
+  import Ecto.SoftDelete.Query
   alias AviutlScripts.Repo
 
   alias AviutlScripts.ScriptManager.Script
@@ -13,13 +14,17 @@ defmodule AviutlScripts.ScriptManager do
   def paginate_scripts(%{after: after_cursor}) do
     query = from(t in Script, order_by: [asc: t.inserted_at, asc: t.id])
 
-    Repo.paginate(query, after: after_cursor, cursor_fields: [:inserted_at, :id], limit: @per_page)
+    query
+    |> with_undeleted
+    |> Repo.paginate(after: after_cursor, cursor_fields: [:inserted_at, :id], limit: @per_page)
   end
 
   def paginate_scripts(%{before: before_cursor}) do
     query = from(t in Script, order_by: [asc: t.inserted_at, asc: t.id])
 
-    Repo.paginate(query,
+    query
+    |> with_undeleted
+    |> Repo.paginate(
       before: before_cursor,
       cursor_fields: [:inserted_at, :id],
       limit: @per_page
@@ -31,7 +36,9 @@ defmodule AviutlScripts.ScriptManager do
       from t in Script,
         order_by: [asc: t.inserted_at, asc: t.id]
 
-    Repo.paginate(query, cursor_fields: [:inserted_at, :id], limit: @per_page)
+    query
+    |> with_undeleted
+    |> Repo.paginate(cursor_fields: [:inserted_at, :id], limit: @per_page)
   end
 
   @doc """
@@ -44,7 +51,9 @@ defmodule AviutlScripts.ScriptManager do
 
   """
   def list_scripts do
-    Repo.all(Script)
+    Script
+    |> with_undeleted
+    |> Repo.all()
   end
 
   @doc """
@@ -61,7 +70,12 @@ defmodule AviutlScripts.ScriptManager do
   ** (Ecto.NoResultsError)
 
   """
-  def get_script!(id), do: Repo.get!(Script, id)
+  def get_script!(id) do
+    Script
+    |> where([s], s.id == ^id)
+    |> with_undeleted
+    |> Repo.one()
+  end
 
   @doc """
   Creates a script.
@@ -112,7 +126,8 @@ defmodule AviutlScripts.ScriptManager do
 
   """
   def delete_script(%Script{} = script) do
-    Repo.delete(script)
+    Repo.soft_delete(script)
+    |> IO.inspect()
   end
 
   @doc """
