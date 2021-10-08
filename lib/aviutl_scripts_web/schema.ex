@@ -10,9 +10,12 @@ defmodule AviutlScriptsWeb.Schema do
 
   query do
     # put queries
+    import_fields :script_queries
   end
 
   mutation do
+    import_fields :user_mutations
+    import_fields :script_mutations
     # import_fields :session_mutations
   end
 

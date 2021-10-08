@@ -4,4 +4,5 @@ defmodule AviutlScripts.Repo do
     adapter: Ecto.Adapters.Postgres
 
   use Paginator, include_total_count: true
+  use Ecto.SoftDelete.Repo
 end

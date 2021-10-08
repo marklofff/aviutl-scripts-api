@@ -26,6 +26,16 @@ defmodule AviutlScriptsWeb.Router do
     end
   end
 
+  scope "/" do
+    pipe_through [:api]
+
+    forward "/graphql", Absinthe.Plug, schema: AviutlScriptsWeb.Schema
+
+    if Mix.env() == :dev do
+      forward "/graphiql", Absinthe.Plug.GraphiQL, schema: AviutlScriptsWeb.Schema
+    end
+  end
+
   # Enables the Swoosh mailbox preview in development.
   #
   # Note that preview only shows emails that were sent by the same

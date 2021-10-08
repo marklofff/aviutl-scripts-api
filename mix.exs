@@ -58,7 +58,8 @@ defmodule AviutlScripts.MixProject do
       {:absinthe_error_payload, "~> 1.0"},
       {:paginator, "~> 1.0.4"},
       {:waffle, "~> 1.1"},
-      {:waffle_ecto, "~> 0.0"}
+      {:waffle_ecto, "~> 0.0"},
+      {:ecto_soft_delete, "~> 1.0"}
     ]
   end
 

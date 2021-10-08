@@ -3,12 +3,14 @@ defmodule AviutlScriptsWeb.Schema.Types do
   use Absinthe.Schema.Notation
 
   alias AviutlScriptsWeb.Schema.{
-    # UserType,
+    UserType,
+    PaginationType,
+    ScriptType,
     # SessionType,
-    # PaginationType
   }
 
-  # import_types PaginationType
-  # import_types UserType
+  import_types PaginationType
+  import_types UserType
+  import_types ScriptType
   # import_types SessionType
 end

@@ -18,7 +18,7 @@ defmodule AviutlScripts.Application do
       AviutlScriptsWeb.Endpoint,
       # Start a worker by calling: AviutlScripts.Worker.start_link(arg)
       # {AviutlScripts.Worker, arg}
-      {Absinthe.Subscription, AviutlScripts.Endpoint}
+      {Absinthe.Subscription, AviutlScriptsWeb.Endpoint}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
