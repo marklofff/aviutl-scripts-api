@@ -8,7 +8,7 @@ defmodule AviutlScripts.ScriptManager.Script do
     field :source_code_url, :string
     field :sub_title, :string
     field :thumb, :string
-    field :titie, :string
+    field :title, :string
     field :author, :id
 
     timestamps()
@@ -18,7 +18,7 @@ defmodule AviutlScripts.ScriptManager.Script do
   @doc false
   def changeset(script, attrs) do
     script
-    |> cast(attrs, [:titie, :sub_title, :thumb, :source_code_url, :download_url])
-    |> validate_required([:titie, :sub_title, :thumb, :source_code_url, :download_url])
+    |> cast(attrs, [:title, :sub_title, :thumb, :source_code_url, :download_url])
+    |> validate_required([:title, :sub_title, :source_code_url, :download_url])
   end
 end

@@ -8,13 +8,39 @@ defmodule AviutlScripts.ScriptManager do
 
   alias AviutlScripts.ScriptManager.Script
 
+  @per_page 5
+
+  def paginate_scripts(%{after: after_cursor}) do
+    query = from(t in Script, order_by: [asc: t.inserted_at, asc: t.id])
+
+    Repo.paginate(query, after: after_cursor, cursor_fields: [:inserted_at, :id], limit: @per_page)
+  end
+
+  def paginate_scripts(%{before: before_cursor}) do
+    query = from(t in Script, order_by: [asc: t.inserted_at, asc: t.id])
+
+    Repo.paginate(query,
+      before: before_cursor,
+      cursor_fields: [:inserted_at, :id],
+      limit: @per_page
+    )
+  end
+
+  def paginate_scripts(_) do
+    query =
+      from t in Script,
+        order_by: [asc: t.inserted_at, asc: t.id]
+
+    Repo.paginate(query, cursor_fields: [:inserted_at, :id], limit: @per_page)
+  end
+
   @doc """
   Returns the list of scripts.
 
   ## Examples
 
-      iex> list_scripts()
-      [%Script{}, ...]
+  iex> list_scripts()
+  [%Script{}, ...]
 
   """
   def list_scripts do
@@ -28,11 +54,11 @@ defmodule AviutlScripts.ScriptManager do
 
   ## Examples
 
-      iex> get_script!(123)
-      %Script{}
+  iex> get_script!(123)
+  %Script{}
 
-      iex> get_script!(456)
-      ** (Ecto.NoResultsError)
+  iex> get_script!(456)
+  ** (Ecto.NoResultsError)
 
   """
   def get_script!(id), do: Repo.get!(Script, id)
@@ -42,11 +68,11 @@ defmodule AviutlScripts.ScriptManager do
 
   ## Examples
 
-      iex> create_script(%{field: value})
-      {:ok, %Script{}}
+  iex> create_script(%{field: value})
+  {:ok, %Script{}}
 
-      iex> create_script(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+  iex> create_script(%{field: bad_value})
+  {:error, %Ecto.Changeset{}}
 
   """
   def create_script(attrs \\ %{}) do
@@ -60,11 +86,11 @@ defmodule AviutlScripts.ScriptManager do
 
   ## Examples
 
-      iex> update_script(script, %{field: new_value})
-      {:ok, %Script{}}
+  iex> update_script(script, %{field: new_value})
+  {:ok, %Script{}}
 
-      iex> update_script(script, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+  iex> update_script(script, %{field: bad_value})
+  {:error, %Ecto.Changeset{}}
 
   """
   def update_script(%Script{} = script, attrs) do
@@ -78,11 +104,11 @@ defmodule AviutlScripts.ScriptManager do
 
   ## Examples
 
-      iex> delete_script(script)
-      {:ok, %Script{}}
+  iex> delete_script(script)
+  {:ok, %Script{}}
 
-      iex> delete_script(script)
-      {:error, %Ecto.Changeset{}}
+  iex> delete_script(script)
+  {:error, %Ecto.Changeset{}}
 
   """
   def delete_script(%Script{} = script) do
@@ -94,8 +120,8 @@ defmodule AviutlScripts.ScriptManager do
 
   ## Examples
 
-      iex> change_script(script)
-      %Ecto.Changeset{data: %Script{}}
+  iex> change_script(script)
+  %Ecto.Changeset{data: %Script{}}
 
   """
   def change_script(%Script{} = script, attrs \\ %{}) do

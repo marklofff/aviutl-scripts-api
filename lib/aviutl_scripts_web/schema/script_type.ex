@@ -11,18 +11,21 @@ defmodule AviutlScriptsWeb.Schema.ScriptType do
 
   object :script_type do
     field :id, :id
-    field :inserted_at, :naive_datetime
-    field :updated_at, :naive_datetime
-    field :deleted_at, :naive_datetime
 
     field :title, :string
     field :sub_title, :string
+    field :source_code_url, :string
+    field :download_url, :string
     field :tumb, :string
     field :uuid, :string
 
     # leader
     field :author, :user_type, name: "author",
       resolve: dataloader(Data)
+
+    field :inserted_at, :naive_datetime
+    field :updated_at, :naive_datetime
+    field :deleted_at, :naive_datetime
   end
 
   object :script_pagination do
@@ -36,13 +39,15 @@ defmodule AviutlScriptsWeb.Schema.ScriptType do
   input_object :script_input do
     field :title, :string
     field :sub_title, :string
-    field :tumb, :string
+    field :download_url, :string
+    field :source_code_url, :string
   end
 
   input_object :script_update_input do
     field :title, :string
     field :sub_title, :string
-    field :tumb, :string
+    field :source_code_url, :string
+    field :download_url, :string
   end
 
   object :script_queries do
@@ -50,12 +55,11 @@ defmodule AviutlScriptsWeb.Schema.ScriptType do
     field :scripts, :script_pagination do
       arg :after, :string
       arg :before, :string
-      resolve &Resolvers.ScriptResolver.list/3
+      resolve &Resolvers.ScriptResolver.paginate_scripts/3
     end
 
     @desc "Get a specific script"
-    field :script, :script_type do
-      arg :id, :id
+    field :script, :script_type do arg :id, :id
       arg :uuid, :string
       arg :unique_name, :string
       resolve &Resolvers.ScriptResolver.show/3
@@ -65,10 +69,10 @@ defmodule AviutlScriptsWeb.Schema.ScriptType do
   object :script_mutations do
     @desc "Update a script"
     field :update_script, type: :script_payload do
-      arg :id, non_null(:integer)
+      arg :id, :id
       arg :params, :script_update_input
 
-      middleware Authentication
+      # TODO middleware Authentication
       resolve &Resolvers.ScriptResolver.update/3
       middleware &build_payload/2
     end
@@ -77,7 +81,7 @@ defmodule AviutlScriptsWeb.Schema.ScriptType do
     field :create_script, type: :script_payload do
       arg :params, :script_input
 
-      middleware Authentication
+      # TODO middleware Authentication
       resolve &Resolvers.ScriptResolver.create/3
       middleware &build_payload/2
     end

@@ -4,7 +4,7 @@ defmodule AviutlScripts.Repo.Migrations.CreateScripts do
 
   def change do
     create table(:scripts) do
-      add :titie, :text
+      add :title, :text
       add :sub_title, :text
       add :thumb, :string
       add :source_code_url, :string
